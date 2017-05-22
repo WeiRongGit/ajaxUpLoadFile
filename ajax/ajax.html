@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+<script type="text/javascript">
+
+    function toFile() {
+    	
+        var fm = document.getElementById('f1');
+        var fd = new FormData(fm);
+        var xhr = new XMLHttpRequest();
+
+         xhr.upload.onprogress = function (evt) {
+
+            var sum = evt.total;
+            var hasLoad = evt.loaded;
+            var width = (hasLoad / sum * 100 ) + "%";
+            document.getElementById("len").style.width = width;
+            document.getElementById("num").innerText = parseInt(width)+"%" ;
+
+        } 
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4  ) {
+                document.getElementById('getData').innerHTML = xhr.responseText;
+            }
+        }
+        
+        xhr.open('post', './toFile.php', true);
+        xhr.send(fd);
+        
+    }
+</script>
+
+<form id="f1" action="toFile.php" method="post" enctype="multipart/form-data">
+    名字： <input name="name" type="text" value="">
+    <br/>
+    <input name="file" type="file" value=""><br/>
+    <input type="button" onclick="toFile()" value="确认"/>
+    <div id="contoner" style="height: 50px; border: 10px solid green; width: 400px;text-align: center; vertical-align: middle;">
+        <span style="float: left;width: 200px;">&nbsp</span>
+        <span id="num" style="float: left;">0%</span>
+        <div id="len" style="width:0px; background-color: green;height: 50px;" ></div>
+
+    </div>
+     <div id="getData"> 
+     	后台得到的信息：
+    </div>
+</form>
+</body>
+</html>
